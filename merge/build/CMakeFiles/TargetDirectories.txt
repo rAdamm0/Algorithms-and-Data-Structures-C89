@@ -1,0 +1,3 @@
+/home/adam/Program/Alg/Exercises/merge/build/CMakeFiles/merge.dir
+/home/adam/Program/Alg/Exercises/merge/build/CMakeFiles/edit_cache.dir
+/home/adam/Program/Alg/Exercises/merge/build/CMakeFiles/rebuild_cache.dir

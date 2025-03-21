@@ -1,0 +1,3 @@
+/home/adam/Program/Alg/Exercises/hello/build/CMakeFiles/hello.dir
+/home/adam/Program/Alg/Exercises/hello/build/CMakeFiles/edit_cache.dir
+/home/adam/Program/Alg/Exercises/hello/build/CMakeFiles/rebuild_cache.dir

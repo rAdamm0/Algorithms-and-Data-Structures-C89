@@ -1,0 +1,1 @@
+/usr/bin/gcc -g "CMakeFiles/merge.dir/merge-sort.c.o" -o merge

@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/adam/Program/Alg/Exercises/hello/build",
+  "command": "/usr/bin/cc   -g -o CMakeFiles/hello.dir/hello.c.o -c /home/adam/Program/Alg/Exercises/hello/hello.c",
+  "file": "/home/adam/Program/Alg/Exercises/hello/hello.c",
+  "output": "CMakeFiles/hello.dir/hello.c.o"
+},
+{
+  "directory": "/home/adam/Program/Alg/Exercises/hello/build",
+  "command": "/usr/bin/cc   -g -o CMakeFiles/hello.dir/hello-main.c.o -c /home/adam/Program/Alg/Exercises/hello/hello-main.c",
+  "file": "/home/adam/Program/Alg/Exercises/hello/hello-main.c",
+  "output": "CMakeFiles/hello.dir/hello-main.c.o"
+}
+]

@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/adam/Program/Alg/Exercises/merge/build",
+  "command": "/usr/bin/gcc   -g -o CMakeFiles/merge.dir/merge-sort.c.o -c /home/adam/Program/Alg/Exercises/merge/merge-sort.c",
+  "file": "/home/adam/Program/Alg/Exercises/merge/merge-sort.c",
+  "output": "CMakeFiles/merge.dir/merge-sort.c.o"
+}
+]
