@@ -1,0 +1,6 @@
+# Input files 
+*.in
+
+# Visual studio files
+*.vcxproj*
+*vs
