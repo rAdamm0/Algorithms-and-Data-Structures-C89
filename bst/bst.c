@@ -266,12 +266,13 @@ BSTNode* bst_search(const BST* T, BSTKey k)
         temp->root = T->root->left;
     }
     bst_search(temp, k);
+    free(temp);
 }
 
 int bst_insert(BST *T, BSTKey k)
 {
     /* [TODO] */
-
+    
     /* Se si implementa lo pseudocodice mostrato nel libro di testo,
        si presti attenzione ai punti seguenti:
 

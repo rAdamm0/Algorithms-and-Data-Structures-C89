@@ -4,3 +4,4 @@
 # Visual studio files
 *.vcxproj*
 *vs
+*Debug
