@@ -251,18 +251,20 @@ BSTNode* bst_search(const BST* T, BSTKey k)
     }
     */
 
+    if (T->root->key == k) {
+        return T->root;
+    }
     BST* temp;
-    temp->root = T->root;
-    if (temp->root->key == k) {
-        return temp->root;
+    if (temp == NULL) {
+        return NULL;
     }
-    if (temp->root->key <= k) {
-        temp->root = temp->root->right;
+    temp = malloc(sizeof(BST));
+    if (T->root->key <= k) {
+        temp->root = T->root->right;
     }
-    else if (temp->root->key >= k) {
-        temp->root = temp->root->left;
+    else {
+        temp->root = T->root->left;
     }
-
     bst_search(temp, k);
 }
 
