@@ -410,7 +410,15 @@ static int rchild(const MinHeap *h, int i)
    priorità minima. Se `i` non ha figli, restituisce -1 */
 static int min_child(const MinHeap *h, int i)
 {
-    return -1; /* [TODO] */
+    int lc, rc;
+    lc = lchild(h, i);
+    rc = rchild(h, i);
+    if (!valid(h, rc) && !valid(h, lc)) {
+        return -1;
+    }
+    else if (valid(h, rc) && valid(h, lc)) {
+        return h->heap[rc].key < h->heap[lc].key ? rc : lc;
+    }
 }
 
 /* Funzione di supporto: scambia l'elemento in posizione `i` con il
