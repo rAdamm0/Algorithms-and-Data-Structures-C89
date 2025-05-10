@@ -493,7 +493,10 @@ void minheap_insert(MinHeap *h, int key, double prio)
 {
     assert( !minheap_is_full(h) );
     assert((key >= 0) && (key < h->size));
-    /* [TODO] */
+    h->heap[h->n].key = key;
+    h->heap[h->n].prio = prio;
+    move_up(h, h->n);
+    h->n++;
 }
 
 /* Rimuove la coppia (chiave, priorità) con priorità minima;
@@ -501,8 +504,13 @@ void minheap_insert(MinHeap *h, int key, double prio)
 int minheap_delete_min(MinHeap *h)
 {
     assert( !minheap_is_empty(h) );
-    /* [TODO] */
-    return -1;
+    int ret;
+    ret = h->heap->key;
+    h->heap->key = h->heap[h->n - 1].key;
+    h->heap->prio = h->heap[h->n - 1].prio;
+    h->n--;
+    move_down(h, 0);
+    return ret;
 }
 
 
