@@ -442,7 +442,16 @@ static void move_up(MinHeap *h, int i)
    la posizione corretta. */
 static void move_down(MinHeap *h, int i)
 {
-    /* [TODO] */
+    int c;
+
+    assert(valid(h, i));
+
+    c = min_child(h, i);
+    while (valid(h, c) && (h->heap[i].prio > h->heap[c].prio)) {
+        swap(h, i, c);
+        i = c;
+        c = min_child(h, i);
+    }
 }
 
 /* Restituisce true (nonzero) se lo heap è vuoto */
