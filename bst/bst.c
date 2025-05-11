@@ -269,6 +269,16 @@ BSTNode* bst_search(const BST* T, BSTKey k)
     free(temp);
 }
 
+BSTNode* parent_search(BSTNode* root, BSTKey k) {
+    if (root != NULL) {
+        if (root->key == k) {
+            return root;
+        }
+        root->key < k ? parent_search(root->right, k) : parent_search(root->left, k);
+    }
+    return NULL;
+}
+
 int bst_insert(BST *T, BSTKey k)
 {
     /* [TODO] */
@@ -287,7 +297,22 @@ int bst_insert(BST *T, BSTKey k)
        - Questa funzione deve restituire 0 se la chiave
          era già presente, 1 altrimenti.
     */
-    return 0; /* sostituire con il valore di ritorno corretto */
+    if (bst_search(T, k) == NULL) {
+        BSTNode* z;
+        z = (BSTNode*)malloc(sizeof(z));
+        assert(z != NULL);
+        z->key = k;
+        BSTNode* parent = parent_search(T->root, k);
+        z->parent = parent;
+        if (parent->key < z->key)
+        {
+            parent->right = z;
+        }
+        else {
+            parent->left = z;
+        }
+    }
+    return 1; /* sostituire con il valore di ritorno corretto */
 }
 
 /* Funzione ausiliaria (non definita nell'interfaccia pubblica) che
@@ -309,13 +334,47 @@ static BSTNode *bst_minimum(BSTNode *n)
     return n;
 }
 
+static int children_Num(BSTNode* n) {
+    if (n->right && n->left) {
+        return 2;
+    }
+    else if (n->right || n->left) {
+        return 1;
+    } 
+    return 0;
+}
+
 void bst_delete(BST *T, BSTNode *n)
 {
     assert(T != NULL);
     assert(n != NULL);
-
-    /* [TODO] */
-
+    BSTNode* rMin;
+    switch (children_Num(n))
+    {
+    case 2:
+        rMin = bst_minimum(n->right);
+        rMin->parent = n->parent;
+        rMin->left = n->left;
+        rMin->right = n->right != rMin ? n->right : NULL;
+        if (n->parent->right == n) {
+            n->parent->right = rMin;
+        }
+        n->parent->left = rMin;
+        break;
+    case 1:
+        if (n->parent->right == n) {
+            n->parent->right = n->left ? n->left : n->right;
+        }
+        n->parent->left = n->left ? n->left : n->right;
+        break;
+    case 0: 
+        if (n->parent->right == n) {
+            n->parent->right = NULL;
+        }
+        n->parent->left = NULL;
+        break;
+    }
+    free(n);
     bst_check(T); /* al termine conviene controllare che la struttura dell'albero sia corretta */
 }
 
