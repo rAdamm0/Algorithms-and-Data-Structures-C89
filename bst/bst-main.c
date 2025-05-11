@@ -130,7 +130,7 @@ int main( int argc, char *argv[] )
             printf("bst_size(T) = %d\n", bst_size(T));
             break;
         case 'p': /* print */
-            bst_print(T);
+            bst_pretty_print(T);
             break;
         default:
             printf("Unknown command %c\n", op);

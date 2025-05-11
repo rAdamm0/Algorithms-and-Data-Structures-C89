@@ -240,41 +240,33 @@ BSTNode* bst_search(const BST* T, BSTKey k)
 
     /* [TODO] questa funzione può essere realizzata, a scelta, in modo
        iterativo o ricorsivo. */
-   /* BSTNode* temp = T->root;
-    while (temp->key != k) {
+   BSTNode* temp = T->root;
+   while (temp != NULL && temp->key != k) {
         if (temp->key < k) {
             temp = temp->right;
         }
-        else {
+       else {
             temp = temp->left;
-        }
+       }
     }
-    */
-
-    if (T->root->key == k) {
-        return T->root;
-    }
-    BST* temp;
-    temp = malloc(sizeof(BST));
-    if (temp == NULL) {
-        return NULL;
-    }
-    if (T->root->key <= k) {
-        temp->root = T->root->right;
-    }
-    else {
-        temp->root = T->root->left;
-    }
-    bst_search(temp, k);
-    free(temp);
+    return temp;
+   
 }
 
 BSTNode* parent_search(BSTNode* root, BSTKey k) {
     if (root != NULL) {
-        if (root->key == k) {
-            return root;
+        if (root->key < k) {
+            if (root->right == NULL) {
+                return root;
+            }
+            return parent_search(root->right, k);
         }
-        root->key < k ? parent_search(root->right, k) : parent_search(root->left, k);
+        else if (root->key > k) {
+            if (root->left == NULL) {
+                return root;
+            }
+            return parent_search(root->left, k);
+        }
     }
     return NULL;
 }
@@ -297,13 +289,21 @@ int bst_insert(BST *T, BSTKey k)
        - Questa funzione deve restituire 0 se la chiave
          era già presente, 1 altrimenti.
     */
-    if (bst_search(T, k) == NULL) {
+    assert(T != NULL);
+    if (bst_search(T, k) == NULL ) {
         BSTNode* z;
-        z = (BSTNode*)malloc(sizeof(z));
+        z = (BSTNode*)malloc(sizeof(BSTNode));
         assert(z != NULL);
         z->key = k;
+        z->left = NULL;
+        z->right = NULL;
         BSTNode* parent = parent_search(T->root, k);
         z->parent = parent;
+        T->size++;
+        if (parent == NULL) {
+            T->root = z;
+            return 1;
+        }
         if (parent->key < z->key)
         {
             parent->right = z;
@@ -311,8 +311,9 @@ int bst_insert(BST *T, BSTKey k)
         else {
             parent->left = z;
         }
+        return 1;
     }
-    return 1; /* sostituire con il valore di ritorno corretto */
+    return 0; /* sostituire con il valore di ritorno corretto */
 }
 
 /* Funzione ausiliaria (non definita nell'interfaccia pubblica) che
@@ -344,38 +345,55 @@ static int children_Num(BSTNode* n) {
     return 0;
 }
 
-void bst_delete(BST *T, BSTNode *n)
+void bst_delete(BST* T, BSTNode* n)
 {
     assert(T != NULL);
     assert(n != NULL);
-    BSTNode* rMin;
+
+    BSTNode* rMin, * child;
+
     switch (children_Num(n))
     {
     case 2:
         rMin = bst_minimum(n->right);
-        rMin->parent = n->parent;
-        rMin->left = n->left;
-        rMin->right = n->right != rMin ? n->right : NULL;
-        if (n->parent->right == n) {
-            n->parent->right = rMin;
-        }
-        n->parent->left = rMin;
+        n->key = rMin->key;
+        bst_delete(T, rMin);
         break;
+
     case 1:
-        if (n->parent->right == n) {
-            n->parent->right = n->left ? n->left : n->right;
+        child = n->left ? n->left : n->right;
+        if (n->parent == NULL) {
+            T->root = child;
         }
-        n->parent->left = n->left ? n->left : n->right;
+        else if (n->parent->left == n) {
+            n->parent->left = child;
+        }
+        else {
+            n->parent->right = child;
+        }
+        if (child != NULL) {
+            child->parent = n->parent;
+        }
+        free(n);
+        T->size--;
         break;
-    case 0: 
-        if (n->parent->right == n) {
+
+    case 0:
+        if (n->parent == NULL) {
+            T->root = NULL;
+        }
+        else if (n->parent->left == n) {
+            n->parent->left = NULL;
+        }
+        else {
             n->parent->right = NULL;
         }
-        n->parent->left = NULL;
+        free(n);
+        T->size--;
         break;
     }
-    free(n);
-    bst_check(T); /* al termine conviene controllare che la struttura dell'albero sia corretta */
+
+    bst_check(T); /* Ensure the BST structure is correct */
 }
 
 /* Funzione ricorsiva che calcola l'altezza dell'albero radicato in
@@ -397,8 +415,8 @@ static int bst_height_rec(const BSTNode *n)
         return -1;
     }
 
-    int lefth = findHeight(n->left);
-    int righth = findHeight(n->right);
+    int lefth = bst_height_rec(n->left);
+    int righth = bst_height_rec(n->right);
 
     if (lefth > righth) {
         return lefth + 1;
@@ -455,19 +473,20 @@ void bst_print( const BST *T )
    dal margine sinistro per fare "rientrare" correttamente il
    sottoalbero. Suggerisco di stampare 3*`depth` spazi prima della
    chiave di `n`. */
-static void bst_pretty_print_rec( const BSTNode *n, int depth )
+static void bst_pretty_print_rec(const BSTNode* n, int depth)
 {
     if (n != NULL) {
-        /* [TODO] Si suggerisce di procedere come segue:
+        // Process the right subtree first
+        bst_pretty_print_rec(n->right, depth + 1);
 
-           1. Stampa ricorsivamente il sottoalbero destro invocando
-              bst_pretty_print_rec(n->right, depth+1);
+        // Print spaces for indentation, then the current node's key
+        for (int i = 0; i < 3 * depth; i++) {
+            printf(" ");
+        }
+        printf("%d\n", n->key);
 
-           2. Stampa 3*n spazi, seguiti dal valore della chiave n->key;
-
-           3. Stampa ricorsivamente il sottoalbero sinistro invocando
-           bst_pretty_print_rec(n->left, depth+1);
-        */
+        // Process the left subtree
+        bst_pretty_print_rec(n->left, depth + 1);
     }
 }
 
