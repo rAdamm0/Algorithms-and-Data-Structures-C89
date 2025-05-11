@@ -393,8 +393,19 @@ void bst_delete(BST *T, BSTNode *n)
 */
 static int bst_height_rec(const BSTNode *n)
 {
-    /* [TODO] */
-    return -1; /* valore di ritorno fittizio per evitare warning del compilatore */
+    if (n == NULL) {
+        return -1;
+    }
+
+    int lefth = findHeight(n->left);
+    int righth = findHeight(n->right);
+
+    if (lefth > righth) {
+        return lefth + 1;
+    }
+    else {
+        return righth + 1;
+    }
 }
 
 int bst_height(const BST *T)
