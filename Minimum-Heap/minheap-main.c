@@ -53,6 +53,7 @@ int main( int argc, char *argv[] )
     h = minheap_create(n);
 
     while (1 == fscanf(filein, " %c", &op)) {
+        //minheap_print(h);
         switch (op) {
         case '+': /* insert */
             fscanf(filein, "%d %lf", &key, &prio);

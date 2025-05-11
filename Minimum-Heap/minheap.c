@@ -417,7 +417,7 @@ static int min_child(const MinHeap *h, int i)
         return -1;
     }
     else if (valid(h, rc) && valid(h, lc)) {
-        return h->heap[rc].key < h->heap[lc].key ? rc : lc;
+        return h->heap[rc].prio < h->heap[lc].prio ? rc : lc;
     }
 }
 
@@ -495,8 +495,8 @@ void minheap_insert(MinHeap *h, int key, double prio)
     assert((key >= 0) && (key < h->size));
     h->heap[h->n].key = key;
     h->heap[h->n].prio = prio;
-    move_up(h, h->n);
     h->n++;
+    move_up(h, h->n-1);
 }
 
 /* Rimuove la coppia (chiave, priorità) con priorità minima;
@@ -520,5 +520,14 @@ void minheap_change_prio(MinHeap *h, int key, double newprio)
 {
     assert(h != NULL);
     assert(key >= 0 && key < h->size);
-    /* [TODO] */
+    int i;
+    i = 0;
+    HeapElem* tmp;
+    tmp = h->heap;
+    while (tmp[i].key != key) {
+        i++;
+    }
+    h->heap[i].prio = newprio;
+    move_up(h, i);
+    move_down(h, i);
 }
