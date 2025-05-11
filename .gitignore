@@ -3,6 +3,10 @@
 
 # Visual studio files
 *.vcxproj*
-*vs
+*vs*
 *Debug
 *json
+
+#CMake files
+*CMake*
+build*
